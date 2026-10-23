@@ -32,3 +32,37 @@
 
 **\*\*Related commit:\*\* Pending — add the commit reference after committing this work.**
 
+
+
+
+
+**## Entry 2 — 23 October 2026**
+
+
+
+**\*\*Task:\*\* Add audit-chain integrity verification.**
+
+
+
+**\*\*What I asked AI:\*\* Help me extend the Trust Vault audit log with a function that verifies the hash chain and detects modified or inconsistent audit entries.**
+
+
+
+**\*\*What AI produced:\*\* A Python verification function that checks each audit entry's previous hash and recalculates its SHA-256 hash, plus a FastAPI endpoint at `/demo/audit/verify`.**
+
+
+
+**\*\*What was wrong or needed attention:\*\* The verification logic needed to use the same data format as the audit-entry creation logic so that valid entries could be verified correctly.**
+
+
+
+**\*\*What I changed:\*\* I added the verification function and API endpoint to `main.py`. I need to test both a valid audit chain and a deliberately modified test entry to confirm that tampering is detected.**
+
+
+
+**\*\*Test result:\*\* \[Replace this with the actual result you observed. Do not claim tampering detection passed until you test it.]**
+
+
+
+**\*\*Related commit:\*\* \[Add the Git commit ID after committing this change.]**
+

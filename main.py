@@ -1,4 +1,4 @@
-
+import hmac
 import sqlite3
 import hashlib
 import json
@@ -63,6 +63,43 @@ def record_audit(actor, action, details):
             previous_hash, entry_hash
         ))
 
+def verify_audit_chain():
+    with connect_db() as db:
+        rows = db.execute(
+            "SELECT * FROM audit_log ORDER BY id"
+        ).fetchall()
+
+    previous_hash = "GENESIS"
+
+    for row in rows:
+        if row["previous_hash"] != previous_hash:
+            return {
+                "valid": False,
+                "entry_id": row["id"],
+                "reason": "Previous hash mismatch"
+            }
+
+        payload = json.dumps({
+            "timestamp": row["timestamp"],
+            "actor": row["actor"],
+            "action": row["action"],
+            "details": row["details"],
+            "previous_hash": previous_hash
+        }, sort_keys=True)
+
+        expected_hash = hashlib.sha256(payload.encode()).hexdigest()
+
+        if not hmac.compare_digest(row["entry_hash"], expected_hash):
+            return {
+                "valid": False,
+                "entry_id": row["id"],
+                "reason": "Entry hash mismatch"
+            }
+
+        previous_hash = row["entry_hash"]
+
+    return {"valid": True, "entries_checked": len(rows)}
+
 
 init_db()
 
@@ -90,3 +127,6 @@ def get_demo_audit():
             "SELECT * FROM audit_log ORDER BY id"
         ).fetchall()
     return [dict(row) for row in rows]
+@app.get("/demo/audit/verify")
+def verify_demo_audit():
+    return verify_audit_chain()
