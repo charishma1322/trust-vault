@@ -49,4 +49,4 @@ The audit hash chain can reveal modifications when verified, but a database admi
 
 ## Testing
 
-Test registration, authentication, uploads, ownership enforcement, sharing, revocation, and audit-chain verification before deployment. Document only test results that have actually been observed.
+Test registration, authentication, uploads, ownership enforcement, sharing, revocation, and audit-chain verification before deployment. Documented only test results that have actually been observed.
